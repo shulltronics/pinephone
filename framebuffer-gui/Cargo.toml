@@ -1,0 +1,8 @@
+[package]
+name = "framebuffer-gui"
+version = "0.0.1"
+authors = ["Carsten Thue-Bludworth <carstentb@protonmail.com>"]
+edition = "2021"
+
+[dependencies]
+framebuffer = "0.3.1"
