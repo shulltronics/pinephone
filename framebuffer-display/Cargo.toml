@@ -1,0 +1,11 @@
+[package]
+name = "framebuffer-display"
+version = "0.0.1"
+authors = ["Carsten Thue-Bludworth <carstentb@protonmail.com>"]
+edition = "2021"
+
+[dependencies]
+# memmap            = { version = "0.7.0", features = ["exact_chuncks"] }
+memmap            = "0.7.0"
+linuxfb           = "0.2.0"
+embedded-graphics = "0.7.1"
