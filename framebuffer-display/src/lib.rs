@@ -38,6 +38,8 @@ impl FramebufferDisplay {
         fb_raw.set_virtual_size(w, h).unwrap();
 
         let bpp = fb_raw.get_bytes_per_pixel();
+        println!("BPP: {:?}", bpp);
+
         Self {
             pixels: buffer,
             width: w,
