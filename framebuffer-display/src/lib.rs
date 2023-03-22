@@ -25,16 +25,26 @@ pub struct FramebufferDisplay {
 impl FramebufferDisplay {
 
     pub fn new() -> FramebufferDisplay {
-        let fb_raw = Framebuffer::new("/dev/fb0").unwrap();
+        let mut fb_raw = Framebuffer::new("/dev/fb0").unwrap();
         let buffer = fb_raw.map().unwrap();
         let (w, h) = fb_raw.get_size();
+        println!("Framebuffer size is {:?}", (w, h));
+        let (vw, vh) = fb_raw.get_virtual_size();
+        println!("Framebuffer virtual size is {:?}", (vw, vh));
+        let (ox, oy) = fb_raw.get_offset();
+        println!("Framebuffer offset is: {:?}\n", (ox, oy));
+
+        println!("Trying to set virtual size...");
+        fb_raw.set_virtual_size(w, h).unwrap();
+
         let bpp = fb_raw.get_bytes_per_pixel();
         Self {
             pixels: buffer,
             width: w,
             height: h,
             bpp: bpp,
-            orientation: Orientation::LANDSCAPE,
+            // start in PORTRAIT
+            orientation: Orientation::PORTRAIT,
         }
     }
 
@@ -43,15 +53,16 @@ impl FramebufferDisplay {
     }
 
     pub fn set_orientation(&mut self, o: Orientation) {
-        self.orientation = o;
+        if o != self.orientation {
+            let w = self.width;
+            self.width = self.height;
+            self.height = w;
+            self.orientation = o;
+        }
     }
 
     pub fn get_size(&self) -> (u32, u32) {
-        if self.orientation == Orientation::PORTRAIT {
-            return (self.width, self.height);
-        } else {
-            return (self.height, self.width);
-        }
+        return (self.width, self.height);
     }
 
     pub fn clear(&mut self) {
@@ -80,7 +91,7 @@ impl DrawTarget for FramebufferDisplay {
             if self.orientation == Orientation::PORTRAIT {
                 idx = (x + y*self.width) as usize;
             } else {
-                idx = ((self.width - 1 - y) + x*self.width) as usize;
+                idx = ((self.height - 1 - y) + x*self.height) as usize;
             }
             // we don't multiply the second term by bits-per-pixels because we cast the buffer here
             let (_prefix, pixels, _suffix) = unsafe { self.pixels.align_to_mut::<u32>() };
