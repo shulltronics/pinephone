@@ -54,6 +54,10 @@ impl FramebufferDisplay {
         }
     }
 
+    pub fn get_bytes_per_pixel(&self) -> u32 {
+        return self.bpp;
+    }
+
     pub fn clear(&mut self) {
         for i in 0..self.pixels.len() {
             self.pixels[i] = 0u8;

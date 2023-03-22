@@ -16,8 +16,10 @@ fn main() {
 
     let mut display = FramebufferDisplay::new();
 
+    display.set_orientation(Orientation::PORTRAIT);
     println!("Display orientation: {:?}\n", display.get_orientation());
     println!("Display size: {:?}\n", display.get_size());
+    println!("Display bpp: {:?}\n", display.get_bytes_per_pixel());
 
     display.clear();
 
