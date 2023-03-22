@@ -39,6 +39,7 @@ impl FramebufferDisplay {
 
         let bpp = fb_raw.get_bytes_per_pixel();
         println!("BPP: {:?}", bpp);
+        println!("Pixel layout: {:?}", fb_raw.get_pixel_layout());
 
         Self {
             pixels: buffer,
